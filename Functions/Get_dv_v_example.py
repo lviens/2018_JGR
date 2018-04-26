@@ -13,7 +13,7 @@ To run this code:
       - t_ini = 0  and t_length = 1  -> the dv/v is computed over the first second of the causal part of the SC function is selected
       - t_ini = 1  and t_length = 2  -> the dv/v is computed from the 1 s to 3 s after the zero lag time of the causal part of the SC function
 The different steps are:
-    - Reads the mat file (E.OMNM.mat) that contains the single station cross-correlation functions stacked over 6 h from February 20 to May 11, 2011 at the E.OMNM station.
+    - Reads the mat file (E.ABHM.mat) that contains the single station cross-correlation functions stacked over 6 h from February 20 to May 11, 2011 at the E.ABHM station.
     - Computes dv/v and correlation coefficient measurements for the vertical/North-south and vertical/East-west components and average them.
     - Plot the results and save the figure in a pdf file in the "dir_out" folder
 
@@ -32,7 +32,7 @@ from Stretching_current import *
 def main():
     dir_ini = './' # Directory folder 
     dir_out = './' # Output directory to save pdf file
-    virt = ['E.OMNM'] # Station name
+    virt = ['E.ABHM'] # Station name
     year = 2011  # Year
     cut  = 1     # Pass band low corner frequency of the filter in Hz
     cut2 = 20    # Pass band high corner frequency of the filter in Hz
@@ -50,21 +50,18 @@ def main():
         fid = dir_ini + os.sep + sta + '.mat'
         [UN_ref , UN , UE_ref , UE, delta, day, stack_hr ]= read_mat(fid) # Reads the file using the function read_hdf5 (see below)
         # Get parameters for the stretching
-        # print(delta)
         t_vec = np.arange(-(UE.shape[0]-1)/delta/2, UE.shape[0]/delta/2, 1/delta) # Time axis
         zero_lag_ind = round(len(UE[:,1])/2) # To compute the dv/v on the causal part of the SC functions.
         t_ini_d = t_ini*delta          # start dv/v computation at t_ini_d/delta seconds from the signal begining
         t_length_d = int(t_length*delta)  # dv/v computation over  t_length_d/delta seconds after t_ini_d/delta
-        # print(t_length, delta, t_length_d)
         dvE, ccE, errorE = np.zeros((int(len(UE[1,:])/av_wind), 1)), np.zeros((int(len(UE[1,:])/av_wind), 1)), np.zeros((int(len(UE[1,:])/av_wind), 1)) # Set variables
         dvN, ccN, errorN = np.zeros((int(len(UE[1,:])/av_wind), 1)), np.zeros((int(len(UE[1,:])/av_wind), 1)), np.zeros((int(len(UE[1,:])/av_wind), 1)) # Set variables
 
-        # print(round(len(UE[:,1])/2))
         datUE = []
         datUN = []
         a=1
         cp =0
-        for i in range(len(UE[1,:])):  #range(len(UE[1,:]))
+        for i in range(len(UE[1,:])):
             UE[:,i] = butter_bandpass_filter(data=UE[:,i] , lowcut=cut, highcut=cut2, fs=delta, order=4)
             # Stacking over av_wind hours of data
             if a<av_wind:
@@ -77,6 +74,7 @@ def main():
                 a+=1;
             else:
                 a=1;
+
                 # Perform stretching
                 [dvE[cp], ccE[cp], cdpE, dtE, errorE[cp], CE ] = Stretching_current(ref = UE_ref, cur = datUE, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = 50,
                                                                   window = np.arange(int(t_ini_d+zero_lag_ind),int(t_ini_d+t_length_d+zero_lag_ind)), 
@@ -104,7 +102,6 @@ def plot_dv_v(pondcc, ponddv, day, stack_hr, virt, cut, cut2, tbis, delta, lengt
     """
     wind_per_day = 24/stack_hr
     day_unit = np.arange(day[0],day[0]+len(ponddv)/wind_per_day, 1/wind_per_day)
-    # print(len(pondcc))
     x_ind = np.arange(int(day[0]) , int(day[-1]),10)
     mm, dd = ddd2mmdd(2011, x_ind)
     dat_plot = []
