@@ -8,13 +8,13 @@ def Stretching_current(ref, cur, t, dvmin, dvmax, nbtrial, window, fmin, fmax, t
     It also computes the correlation coefficient between the Reference waveform and the current waveform.
 
     INPUTS:
-        - ref = Reference waveform (size N)
-        - cur = Current waveform (size N)
-        - t = time vector, common to both ref and cur (size N)
-        - dvmin = minimum bound for the velocity variation (example: dvmin=-0.03 for -3% of relative velocity change)
-        - dvmax = maximum bound for the velocity variation (example: dvmin=0.03 for 3% of relative velocity change)
-        - nbtrial = number of stretching coefficient between dvmin and dvmax (no need to be > 100)
-        - window = vector of the indices of the cur and ref windows on wich you want to do the measurements
+        - ref = Reference waveform (np.ndarray, size N)
+        - cur = Current waveform (np.ndarray, size N)
+        - t = time vector, common to both ref and cur (np.ndarray, size N)
+        - dvmin = minimum bound for the velocity variation; example: dvmin=-0.03 for -3% of relative velocity change ('float')
+        - dvmax = maximum bound for the velocity variation; example: dvmax=0.03 for 3% of relative velocity change ('float')
+        - nbtrial = number of stretching coefficient between dvmin and dvmax, no need to be higher than 100  ('float')
+        - window = vector of the indices of the cur and ref windows on wich you want to do the measurements (np.ndarray, size tmin*delta:tmax*delta)
         For error computation:
             - fmin = minimum frequency of the data
             - fmax = maximum frequency of the data
