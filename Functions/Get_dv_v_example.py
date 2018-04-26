@@ -1,5 +1,5 @@
 """
-L. Viens 02/29/2018
+L. Viens 04/26/2018
 This code computes relative homogeneous velocity changes (dv/v) using the stretching technique from single-station cross-correlation functions
 All the data for Viens et al. (2018, submitted to JGR) can be download at: https://doi.org/10.7910/DVN/TPDPHA
 To run this code:
@@ -30,8 +30,8 @@ from Stretching_current import *
 
 
 def main():
-    dir_ini = '/Users/loic/Documents/Tohoku_auto_corr_200sps_mat/' # Directory folder 
-    dir_out = '/Users/loic/Documents/Tohoku_auto_corr_200sps_mat/' # Output directory to save pdf file
+    dir_ini = './' # Directory folder 
+    dir_out = './' # Output directory to save pdf file
     virt = ['E.OMNM'] # Station name
     year = 2011  # Year
     cut  = 10     # Pass band low corner frequency of the filter in Hz
