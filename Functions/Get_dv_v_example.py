@@ -34,17 +34,19 @@ def main():
     dir_out = './' # Output directory to save pdf file
     virt = ['E.OMNM'] # Station name
     year = 2011  # Year
-    cut  = 10     # Pass band low corner frequency of the filter in Hz
+    cut  = 1     # Pass band low corner frequency of the filter in Hz
     cut2 = 20    # Pass band high corner frequency of the filter in Hz
-    hr_to_stack = 12 # number of hours to stack
+    hr_to_stack = 6 # number of hours to stack
     av_wind = 60/15*hr_to_stack # 60/15 as the SC functions are computed every 15 min.
 
     # Stretching parameters
     Epsilon = .10  # Stretching between -Epsilon to +Epsilon (multiply by 100 to get the dv in %) STRETCHING LIMITS
     t_ini = 0      # Time to start computing the dv/v (in second). Zero is at the zero lag time
-    t_length = .5  # Length of the signal over which the dv/v is computed (in second)
+    t_length = 1   # Length of the signal over which the dv/v is computed (in second)
 
     for sta in virt:    # Loop over the different stations
+        print(sta + ": Data filter: " + str(cut) + "-" + str(cut2) + " Hz, dv/v computed between " + str(t_ini) + " s and " + str(t_length) + " s of the causal part, with Epsilon = " + str(Epsilon*100)+" %")
+
         fid = dir_ini + os.sep + sta + '.mat'
         [UN_ref , UN , UE_ref , UE, delta, day, stack_hr ]= read_mat(fid) # Reads the file using the function read_hdf5 (see below)
         # Get parameters for the stretching
@@ -76,11 +78,11 @@ def main():
             else:
                 a=1;
                 # Perform stretching
-                [dvE[cp], ccE[cp], cdpE, dtE, errorE[cp], CE ] = stretching_current(ref = UE_ref, cur = datUE, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = 50,
+                [dvE[cp], ccE[cp], cdpE, dtE, errorE[cp], CE ] = Stretching_current(ref = UE_ref, cur = datUE, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = 50,
                                                                   window = np.arange(int(t_ini_d+zero_lag_ind),int(t_ini_d+t_length_d+zero_lag_ind)), 
                                                                   fmin = cut, fmax = cut2, tmin = t_ini_d, tmax = t_length_d)
 
-                [dvN[cp], ccN[cp], cdpN, dtN, errorN[cp], CN] = stretching_current(ref = UN_ref, cur = datUN, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = 50,
+                [dvN[cp], ccN[cp], cdpN, dtN, errorN[cp], CN] = Stretching_current(ref = UN_ref, cur = datUN, t = t_vec, dvmin = -Epsilon, dvmax = Epsilon, nbtrial = 50,
                                                               window = np.arange(int(t_ini_d+zero_lag_ind),int(t_ini_d+t_length_d+zero_lag_ind)), 
                                                               fmin = cut, fmax = cut2, tmin = t_ini_d, tmax = t_length_d)
                 cp+=1
@@ -117,8 +119,8 @@ def plot_dv_v(pondcc, ponddv, day, stack_hr, virt, cut, cut2, tbis, delta, lengt
     ax1 = fig.add_subplot(211)
     ax1.set_ylabel("Correlation coefficient")
     ax1.set_title(virt + '  (Filter: '+("%1.0f" % cut)+'-'+("%1.0f" % cut2)+' Hz)\n'+
-                  'Stretching computed between'+("%2.0f" % (tbis/delta))+' and'+
-                  ("%2.0f" % (tbis/delta+length_t/delta))+' s\n')
+                  'Stretching computed between '+("%2.1f" % (tbis/delta))+' and '+
+                  ("%2.1f" % (tbis/delta+length_t/delta))+' s\n')
     ax1.set_xlim(day[0], day[-1])
     ax1.set_xticks(x_ind)
     ax1.axes.xaxis.set_ticklabels(dat_plot)
