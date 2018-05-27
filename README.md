@@ -1,5 +1,5 @@
-# Viens et al. (2018, submitted to JGR)
-This repository contains Python functions for Viens et al. (2018, submitted to JGR).
+# Viens et al. (2018, accepted in Journal of Geophysical Research - Solid Earth)
+This repository contains Python functions for Viens et al. (2018, accepted in JGR).
 The single station cross-correlation (SC) functions for all the MeSO-net stations between February 20, 2011 to May 11, 2011 can be downloaded at: https://doi.org/10.7910/DVN/TPDPHA
 
 Files:
