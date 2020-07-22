@@ -1,4 +1,4 @@
-# Python codes to compute SC functions and compute dv/v for [Viens et al. (2018, JGR)](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2018JB015697)
+# Python codes to compute SC functions and dv/v measurements ([Viens et al., 2018, JGR](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2018JB015697))
 
 ## Description:
 This repository contains Python codes for [Viens et al. (2018, JGR)](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2018JB015697).
